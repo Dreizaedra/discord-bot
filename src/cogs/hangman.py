@@ -1,5 +1,4 @@
 from discord.ext import commands
-from discord.ext.commands import Context
 
 
 async def setup(bot) -> None:
@@ -17,7 +16,7 @@ class Hangman(commands.Cog, name="Hangman"):
         description="This is a hangman game!",
         # cooldown=10.0
     )
-    async def start_game(self, context: Context) -> None:
+    async def start_game(self, context: commands.Context) -> None:
         if self.player == context.author:
             await context.channel.send('Game ended!')
             self.game_started = False
