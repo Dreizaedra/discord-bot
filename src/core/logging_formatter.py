@@ -1,5 +1,6 @@
 import logging
 
+
 class LoggingFormatter(logging.Formatter):
     # Colors
     black = "\x1b[30m"
