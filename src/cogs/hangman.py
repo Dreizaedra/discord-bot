@@ -1,24 +1,38 @@
-from random import choice
+from discord.ext import commands
+from discord.ext.commands import Context
 
-class HangmanGame():
-    def __init__(self, attempt_number: int) -> None:
-        self.words = ['PYTHON', 'HANGMAN', 'HELLO', 'HELP', 'DISCORD']
-        self.word_to_guess = choice(self.words)
-        self.guessed_letters = []
-        self.attempts = attempt_number
-    
-    def guess_letter(self, letter: str) -> bool:
-        if letter in self.guessed_letters or letter not in self.word_to_guess:
-            return False # already guessed end of the line
-        elif letter in self.word_to_guess:
-            self.guessed_letters.append(letter)
-            return True # correct guess
 
-    def display_word(self) -> str:
-        masked_word = ''
-        for letter in self.word_to_guess:
-            if letter in self.guessed_letters:
-                masked_word += letter
-            else:
-                masked_word += '\_'
-        return masked_word.upper()
+async def setup(bot) -> None:
+    await bot.add_cog(Hangman(bot))
+
+
+class Hangman(commands.Cog, name="Hangman"):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+        self.game_started = False
+        self.player = ''
+
+    @commands.hybrid_command(
+        name="hangman",
+        description="This is a hangman game!",
+        # cooldown=10.0
+    )
+    async def start_game(self, context: Context) -> None:
+        if self.player == context.author:
+            await context.channel.send('Game ended!')
+            self.game_started = False
+            self.player = ''
+            return
+        elif self.game_started:
+            await context.channel.send(
+                f"Game already started with **{self.player}**\n"
+                + f"Please wait until they have finished!"
+            )
+            return
+        self.game_started = True
+        self.player = context.author
+        await context.channel.send(content=f"Welcome to the Hangman game {self.player.mention}!")
+
+
+
+
