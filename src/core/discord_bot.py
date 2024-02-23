@@ -4,7 +4,6 @@ import random
 
 import discord
 from discord.ext import commands, tasks
-from discord.ext.commands import Context
 
 
 class DiscordBot(commands.Bot):
@@ -56,7 +55,7 @@ class DiscordBot(commands.Bot):
             return
         await self.process_commands(message)
 
-    async def on_command_completion(self, context: Context) -> None:
+    async def on_command_completion(self, context: commands.Context) -> None:
         full_command_name = context.command.qualified_name
         split = full_command_name.split(' ')
         executed_command = str(split[0])
@@ -70,7 +69,7 @@ class DiscordBot(commands.Bot):
                 f'Executed {executed_command} command by {context.author} (ID: {context.author.id}) in DMs'
             )
 
-    async def on_command_error(self, context: Context, error) -> None:
+    async def on_command_error(self, context: commands.Context, error) -> None:
         if isinstance(error, commands.CommandOnCooldown):
             minutes, seconds = divmod(error.retry_after, 60)
             hours, minutes = divmod(minutes, 60)
