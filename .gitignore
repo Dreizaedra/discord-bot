@@ -3,4 +3,4 @@ venv/
 .idea/
 .env
 __pycache__/
-discord.log
+var/
